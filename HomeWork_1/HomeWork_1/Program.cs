@@ -38,6 +38,12 @@ namespace HomeWork_1
             } while (Command != "/exit");
         }
 
+        /// <summary>
+        /// Обработчик команд пользователя
+        /// </summary>
+        /// <param name="Command"></param>
+        /// <param name="UserName"></param>
+        /// <returns></returns>
         static string CommandHandler(string Command, string UserName)
         {            
             Console.WriteLine(); //создаем отступ для удобочитаемости
@@ -83,6 +89,11 @@ namespace HomeWork_1
             Console.WriteLine(); //создаем отступ для удобочитаемости
             return UserName;
         }
+
+        /// <summary>
+        /// Получение имени пользователя
+        /// </summary>
+        /// <returns></returns>
         static string GetName()
         {
             Console.WriteLine("Поведай имя мне своё");
