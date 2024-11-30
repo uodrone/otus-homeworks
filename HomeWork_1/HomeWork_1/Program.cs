@@ -147,7 +147,12 @@ namespace HomeWork_1
             return UserName;
         }
 
-        public static void TaskAdd(ref List<string> TaskList) {
+        /// <summary>
+        /// Добавление задачи в лист
+        /// </summary>
+        /// <param name="TaskList"></param>
+        public static void TaskAdd(ref List<string> TaskList)
+        {
             Console.WriteLine();// отступ для удобочитаемости
             Console.WriteLine("Введи команду, которую нужно сохранить:");
             string Task = Console.ReadLine();
@@ -162,6 +167,10 @@ namespace HomeWork_1
             }
         }
 
+        /// <summary>
+        /// Удаление задачи из листа
+        /// </summary>
+        /// <param name="TaskList"></param>
         public static void TaskRemove(ref List<string> TaskList)
         {
             if (!TaskList.Any())
