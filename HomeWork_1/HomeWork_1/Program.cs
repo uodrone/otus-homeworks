@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OTUS_Homework_3
@@ -11,24 +12,17 @@ namespace OTUS_Homework_3
             Error
         }
 
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Попробуем решить квадратное уравнение a*x^2 + b*x + c = 0");
-            HandlerExeption();
-        }
-
-        /// <summary>
-        /// Запрашиваем данные и обрабатываем исключения
-        /// </summary>
-        static void HandlerExeption()
-        {
             var Arguments = new Dictionary<string, int>();
             var ArgsCheckFormat = new Dictionary<string, string>();
             var ListErrorArgs = new List<string>();
 
-            GetArgument("a", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
-            GetArgument("b", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
-            GetArgument("c", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
+            var Menu = new InteractiveMenu();
+
+            Console.SetCursorPosition(0, Menu.MenuHandler(ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs));
+
 
             try
             {
@@ -48,30 +42,25 @@ namespace OTUS_Homework_3
             {
                 FormatData(fex.Message, Severity.Error, ArgsCheckFormat);
                 Console.WriteLine();
-                Console.WriteLine("Начинаем все сначала:");
-                HandlerExeption();
+                Console.WriteLine("Начинаем все сначала? (Enter - ДА, Esc - выход)");
+                ConsoleKeyInfo ConsKey = Console.ReadKey();
+                if (ConsKey.Key == ConsoleKey.Enter)
+                {
+                    Console.Clear();
+                    Main();
+                }
+                if (ConsKey.Key == ConsoleKey.Escape)
+                {
+                    return;
+                }
             }
-            catch (Exception ex) {
-                FormatData(ex.Message, Severity.Warning, ArgsCheckFormat);
-            }
-        }
-
-        /// <summary>
-        /// Метод получения аргумента уравнения
-        /// </summary>
-        /// <param name="ArgName"></param>
-        /// <param name="Arguments"></param>
-        /// <param name="ArgsCheckFormat"></param>
-        static void GetArgument (string ArgName, ref Dictionary<string, int> Arguments, ref Dictionary<string, string> ArgsCheckFormat, ref List<string> ListErrorArgs)
-        {
-            Console.WriteLine($"Введите значение {ArgName}:");
-            string ArgValString = Console.ReadLine();
-            ArgsCheckFormat.Add(ArgName, ArgValString);
-            bool result = int.TryParse(ArgValString, out int ArgVal);
-            Arguments.Add(ArgName, ArgVal);
-            if (!result)
+            catch(OverflowException ovex)
             {
-                ListErrorArgs.Add(ArgName);
+                FormatData($"Слишком много. Результат не вписывается в диапазон: {ovex.Message}", Severity.Warning, ArgsCheckFormat);
+            }
+            catch (Exception ex)
+            {
+                FormatData(ex.Message, Severity.Warning, ArgsCheckFormat);
             }
         }
 
@@ -82,8 +71,15 @@ namespace OTUS_Homework_3
         /// <returns></returns>
         static int GetDiscriminant (Dictionary<string, int> Arguments)
         {
-            int D = Arguments["b"]*Arguments["b"] - 4*Arguments["a"]*Arguments["c"];
-            return D;
+            try
+            {
+                int D = checked(Arguments["b"] * Arguments["b"] - 4 * Arguments["a"] * Arguments["c"]);
+                return D;
+            }
+            catch (OverflowException)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -93,29 +89,36 @@ namespace OTUS_Homework_3
         /// <exception cref="Exception"></exception>
         static void GetRoots (Dictionary<string, int> Arguments)
         {
-            int D = GetDiscriminant(Arguments);
-            int a = Arguments["a"];
-            int b = Arguments["b"];            
+            try {
+                int D = GetDiscriminant(Arguments);
+                int a = Arguments["a"];
+                int b = Arguments["b"];
 
-            if (D < 0)
+                if (D < 0)
+                {
+                    var ExceptionRoots = new ExeptionRoots();
+                    ExceptionRoots.SendExeptionRoots();
+                }
+                else if (D == 0)
+                {
+                    double x = checked((Math.Sqrt(D) - b) / 2 * a);
+                    Console.WriteLine("x = " + x);
+                }
+                else
+                {
+                    double x1 = checked((Math.Sqrt(D) - b) / 2 * a);
+                    double x2 = checked((-Math.Sqrt(D) - b) / 2 * a);
+
+                    Console.WriteLine("x1 = " + x1);
+                    Console.WriteLine("x2 = " + x2);
+                }
+
+                Console.WriteLine("Поздравляю, Вы гениальны!");
+            }
+            catch (OverflowException)
             {
-                var ExceptionRoots = new ExeptionRoots();
-                ExceptionRoots.SendExeptionRoots();
+                throw;
             }
-            else if (D == 0) {
-                double x = (Math.Sqrt(D) - b) / 2 * a;
-                Console.WriteLine("x = " + x);
-            }
-            else
-            {
-                double x1 = (Math.Sqrt(D) - b) / 2 * a;
-                double x2 = (-Math.Sqrt(D) - b) / 2 * a;
-
-                Console.WriteLine("x1 = " + x1);
-                Console.WriteLine("x2 = " + x2);
-            }
-
-            Console.WriteLine("Поздравляю, Вы гениальны!");
         }
 
         /// <summary>
@@ -124,6 +127,7 @@ namespace OTUS_Homework_3
         /// <param name="message"></param>
         /// <param name="severity"></param>
         /// <param name="data"></param>
+        
         static void FormatData(string message, Severity severity, IDictionary<string, string> data)
         {
             //устанавливаем цвета консоли в зависимости от типа ошибки
