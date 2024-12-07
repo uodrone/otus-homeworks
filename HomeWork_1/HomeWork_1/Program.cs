@@ -42,16 +42,12 @@ namespace OTUS_Homework_3
             {
                 FormatData(fex.Message, Severity.Error, ArgsCheckFormat);
                 Console.WriteLine();
-                Console.WriteLine("Начинаем все сначала? (Enter - ДА, Esc - выход)");
+                Console.WriteLine("Начинаем все сначала? (Enter - ДА)");
                 ConsoleKeyInfo ConsKey = Console.ReadKey();
                 if (ConsKey.Key == ConsoleKey.Enter)
                 {
                     Console.Clear();
                     Main();
-                }
-                if (ConsKey.Key == ConsoleKey.Escape)
-                {
-                    return;
                 }
             }
             catch(OverflowException ovex)
