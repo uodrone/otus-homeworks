@@ -9,11 +9,13 @@ namespace OTUS_Homework_3
         enum Severity
         {
             Warning,
+            Overflow,
             Error
         }
 
         static void Main()
         {
+
             Console.WriteLine("Попробуем решить квадратное уравнение a*x^2 + b*x + c = 0");
             var Arguments = new Dictionary<string, int>();
             var ArgsCheckFormat = new Dictionary<string, string>();
@@ -21,16 +23,16 @@ namespace OTUS_Homework_3
 
             var Menu = new InteractiveMenu();
 
-            Console.SetCursorPosition(0, Menu.MenuHandler(ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs));
-
-
             try
             {
+                Menu.MenuHandler(ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
+                Console.SetCursorPosition(0, 5);
+
                 if (ListErrorArgs.Count > 0)
                 {
                     string ErrorArgs = string.Join(", ", ListErrorArgs);
                     string EndWord = ListErrorArgs.Count > 1 ? "ов" : "а";
-
+                    
                     throw new FormatException($"Неверный формат параметр{EndWord}: {ErrorArgs}");
                 }
                 else
@@ -40,6 +42,7 @@ namespace OTUS_Homework_3
             }
             catch (FormatException fex)
             {
+                Console.SetCursorPosition(0, 5);
                 FormatData(fex.Message, Severity.Error, ArgsCheckFormat);
                 Console.WriteLine();
                 Console.WriteLine("Начинаем все сначала? (Enter - ДА)");
@@ -52,10 +55,19 @@ namespace OTUS_Homework_3
             }
             catch(OverflowException ovex)
             {
-                FormatData($"Слишком много. Результат не вписывается в диапазон: {ovex.Message}", Severity.Warning, ArgsCheckFormat);
+                Console.SetCursorPosition(0, 5);
+                if (ovex.Data.Contains("ArgOverflow"))
+                {
+                    FormatData(ovex.Message, Severity.Overflow, ArgsCheckFormat);
+                }
+                else
+                {
+                    FormatData($"Слишком много. Результат не вписывается в диапазон: {ovex.Message}", Severity.Error, ArgsCheckFormat);
+                }
             }
             catch (Exception ex)
             {
+                Console.SetCursorPosition(0, 5);
                 FormatData(ex.Message, Severity.Warning, ArgsCheckFormat);
             }
         }
@@ -108,8 +120,6 @@ namespace OTUS_Homework_3
                     Console.WriteLine("x1 = " + x1);
                     Console.WriteLine("x2 = " + x2);
                 }
-
-                Console.WriteLine("Поздравляю, Вы гениальны!");
             }
             catch (OverflowException)
             {
@@ -129,7 +139,12 @@ namespace OTUS_Homework_3
             //устанавливаем цвета консоли в зависимости от типа ошибки
             if (severity == Severity.Error) {
                 Console.BackgroundColor = ConsoleColor.Red;
-            } else
+            } 
+            else if (severity == Severity.Overflow)
+            {
+                Console.BackgroundColor = ConsoleColor.Green;
+            }
+            else
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Yellow;

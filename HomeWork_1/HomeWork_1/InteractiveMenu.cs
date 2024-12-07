@@ -47,6 +47,8 @@ namespace OTUS_Homework_3
             {
                 selectedValue = 1;
             }
+            //убираем мигание курсора
+            Console.CursorVisible = false;
         }
 
         /// <summary>
@@ -62,6 +64,8 @@ namespace OTUS_Homework_3
             {
                 selectedValue = 4;
             }
+            //убираем мигание курсора
+            Console.CursorVisible = false;
         }
 
         private static void SetCursorPosition(int pos)
@@ -81,7 +85,7 @@ namespace OTUS_Homework_3
         /// <summary>
         /// Запуск и управление меню
         /// </summary>
-        public int MenuHandler(ref Dictionary<string, int> Arguments, ref Dictionary<string, string> ArgsCheckFormat, ref List<string> ListErrorArgs)
+        public void MenuHandler(ref Dictionary<string, int> Arguments, ref Dictionary<string, string> ArgsCheckFormat, ref List<string> ListErrorArgs)
         {
             ConsoleKeyInfo ConsKey;
             int lineLength = ConsoleStringPosition;
@@ -111,9 +115,27 @@ namespace OTUS_Homework_3
                     case ConsoleKey.Enter:  
                         if (ArgsCheckFormat.Count == 3)
                         {
-                            GetArgument("a", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
-                            GetArgument("b", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
-                            GetArgument("c", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
+                            string? ArgA = GetArgument("a", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
+                            string? ArgB = GetArgument("b", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
+                            string? ArgC = GetArgument("c", ref Arguments, ref ArgsCheckFormat, ref ListErrorArgs);
+                            
+                            if (ArgA != null)
+                            {
+                                var ExRoots = new ExeptionRoots();
+                                ExRoots.InputIntOverflow("a", ArgA);
+                            }
+
+                            if (ArgB != null)
+                            {
+                                var ExRoots = new ExeptionRoots();
+                                ExRoots.InputIntOverflow("b", ArgB);
+                            }
+
+                            if (ArgC != null)
+                            {
+                                var ExRoots = new ExeptionRoots();
+                                ExRoots.InputIntOverflow("c", ArgC);
+                            }
                         }
                         break;
                     default:
@@ -165,8 +187,6 @@ namespace OTUS_Homework_3
                 SetCursorPosition(selectedValue);
             }
             while (Arguments.Count < 3);
-
-            return selectedValue + 2;
         }
 
         /// <summary>
@@ -182,13 +202,24 @@ namespace OTUS_Homework_3
             lineLength++;
         }
 
-        public void GetArgument(string ArgName, ref Dictionary<string, int> Arguments, ref Dictionary<string, string> ArgsCheckFormat, ref List<string> ListErrorArgs)
+        public string? GetArgument(string ArgName, ref Dictionary<string, int> Arguments, ref Dictionary<string, string> ArgsCheckFormat, ref List<string> ListErrorArgs)
         {
-            bool result = int.TryParse(ArgsCheckFormat[ArgName], out int ArgVal);
-            Arguments.Add(ArgName, ArgVal);
-            if (!result)
+            try
             {
+                int ArgVal = int.Parse(ArgsCheckFormat[ArgName]);
+                Arguments.Add(ArgName, ArgVal);
+                return null;
+            }
+            catch (OverflowException)
+            {
+                Arguments.Add(ArgName, 0);
+                return ArgsCheckFormat[ArgName];
+            }
+            catch (FormatException)
+            {
+                Arguments.Add(ArgName, 0);
                 ListErrorArgs.Add(ArgName);
+                return null;
             }
         }
 
