@@ -1,4 +1,4 @@
-using System.Text;
+п»їusing System.Text;
 
 namespace OTUS_Homework_3
 {
@@ -6,13 +6,13 @@ namespace OTUS_Homework_3
     {
 
         /// <summary>
-        /// Инициализируем положение курсора
+        /// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїРѕР»РѕР¶РµРЅРёРµ РєСѓСЂСЃРѕСЂР°
         /// </summary>
         private static int selectedValue = 0;
         private static int ConsoleStringPosition = 5;
 
         /// <summary>
-        /// Аргументы в пунктах меню
+        /// РђСЂРіСѓРјРµРЅС‚С‹ РІ РїСѓРЅРєС‚Р°С… РјРµРЅСЋ
         /// </summary>
         private static string[] options = new[]{
             "a: ",
@@ -21,7 +21,7 @@ namespace OTUS_Homework_3
         };
 
         /// <summary>
-        /// Выводим меню
+        /// Р’С‹РІРѕРґРёРј РјРµРЅСЋ
         /// </summary>
         private static void MenuRender ()
         {
@@ -30,12 +30,12 @@ namespace OTUS_Homework_3
                 Console.SetCursorPosition(2, i+1);
                 Console.WriteLine($"{options[i]}");
             }
-            //убираем мигание курсора
+            //СѓР±РёСЂР°РµРј РјРёРіР°РЅРёРµ РєСѓСЂСЃРѕСЂР°
             Console.CursorVisible = false;
         }
 
         /// <summary>
-        /// Смещаем курсор вниз
+        /// РЎРјРµС‰Р°РµРј РєСѓСЂСЃРѕСЂ РІРЅРёР·
         /// </summary>
         private static void CursorToDown()
         {
@@ -47,12 +47,12 @@ namespace OTUS_Homework_3
             {
                 selectedValue = 1;
             }
-            //убираем мигание курсора
+            //СѓР±РёСЂР°РµРј РјРёРіР°РЅРёРµ РєСѓСЂСЃРѕСЂР°
             Console.CursorVisible = false;
         }
 
         /// <summary>
-        /// Смещаем курсор вверх
+        /// РЎРјРµС‰Р°РµРј РєСѓСЂСЃРѕСЂ РІРІРµСЂС…
         /// </summary>
         private static void CursorToTop()
         {
@@ -64,7 +64,7 @@ namespace OTUS_Homework_3
             {
                 selectedValue = 4;
             }
-            //убираем мигание курсора
+            //СѓР±РёСЂР°РµРј РјРёРіР°РЅРёРµ РєСѓСЂСЃРѕСЂР°
             Console.CursorVisible = false;
         }
 
@@ -83,7 +83,7 @@ namespace OTUS_Homework_3
         }
 
         /// <summary>
-        /// Запуск и управление меню
+        /// Р—Р°РїСѓСЃРє Рё СѓРїСЂР°РІР»РµРЅРёРµ РјРµРЅСЋ
         /// </summary>
         public void MenuHandler(ref Dictionary<string, int> Arguments, ref Dictionary<string, string> ArgsCheckFormat, ref List<string> ListErrorArgs)
         {
@@ -139,12 +139,12 @@ namespace OTUS_Homework_3
                         }
                         break;
                     default:
-                        //включаем обратно мигание курсора
+                        //РІРєР»СЋС‡Р°РµРј РѕР±СЂР°С‚РЅРѕ РјРёРіР°РЅРёРµ РєСѓСЂСЃРѕСЂР°
                         Console.CursorVisible = true;
                         int cursorTop = Console.CursorTop;
                         sb.Append(ConsKey.KeyChar);
                         
-                        //Наполняем словарь проверки значениями, исходя из номера строки, на которой находимся
+                        //РќР°РїРѕР»РЅСЏРµРј СЃР»РѕРІР°СЂСЊ РїСЂРѕРІРµСЂРєРё Р·РЅР°С‡РµРЅРёСЏРјРё, РёСЃС…РѕРґСЏ РёР· РЅРѕРјРµСЂР° СЃС‚СЂРѕРєРё, РЅР° РєРѕС‚РѕСЂРѕР№ РЅР°С…РѕРґРёРјСЃСЏ
                         if (selectedValue == 1)
                         {
                             if (ArgsCheckFormat.ContainsKey("a"))
@@ -190,7 +190,7 @@ namespace OTUS_Homework_3
         }
 
         /// <summary>
-        /// Выставляем позицию курсора при наборе значений в меню
+        /// Р’С‹СЃС‚Р°РІР»СЏРµРј РїРѕР·РёС†РёСЋ РєСѓСЂСЃРѕСЂР° РїСЂРё РЅР°Р±РѕСЂРµ Р·РЅР°С‡РµРЅРёР№ РІ РјРµРЅСЋ
         /// </summary>
         /// <param name="lineLength"></param>
         /// <param name="cursorTop"></param>
