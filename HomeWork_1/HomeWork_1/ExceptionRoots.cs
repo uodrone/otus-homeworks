@@ -1,4 +1,4 @@
-namespace OTUS_Homework_3
+п»їnamespace OTUS_Homework_3
 {
     internal class ExeptionRoots:Exception
     {
@@ -9,7 +9,7 @@ namespace OTUS_Homework_3
         : base(message) { }
 
         public void InputIntOverflow(string paramName, string value) {
-            var ovex = new OverflowException($"Введенное значение параметра {paramName}, равное {value} превышает размер int");
+            var ovex = new OverflowException($"Р’РІРµРґРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° {paramName}, СЂР°РІРЅРѕРµ {value} РїСЂРµРІС‹С€Р°РµС‚ СЂР°Р·РјРµСЂ int");
             ovex.Data.Add("ArgOverflow", value);
             throw ovex;
         }
