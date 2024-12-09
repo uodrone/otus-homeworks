@@ -1,11 +1,12 @@
 namespace OTUS_Homework_3
 {
-    internal class ExeptionRoots
+    internal class ExeptionRoots:Exception
     {
-        public void SendExeptionRoots()
+        public ExeptionRoots()
         {
-            throw new Exception("¬ещественных значений не найдено");
         }
+        public ExeptionRoots(string message)
+        : base(message) { }
 
         public void InputIntOverflow(string paramName, string value) {
             var ovex = new OverflowException($"¬веденное значение параметра {paramName}, равное {value} превышает размер int");

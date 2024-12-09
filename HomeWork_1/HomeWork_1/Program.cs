@@ -79,15 +79,8 @@ namespace OTUS_Homework_3
         /// <returns></returns>
         static int GetDiscriminant (Dictionary<string, int> Arguments)
         {
-            try
-            {
-                int D = checked(Arguments["b"] * Arguments["b"] - 4 * Arguments["a"] * Arguments["c"]);
-                return D;
-            }
-            catch (OverflowException)
-            {
-                throw;
-            }
+            int D = checked(Arguments["b"] * Arguments["b"] - 4 * Arguments["a"] * Arguments["c"]);
+            return D;
         }
 
         /// <summary>
@@ -97,33 +90,26 @@ namespace OTUS_Homework_3
         /// <exception cref="Exception"></exception>
         static void GetRoots (Dictionary<string, int> Arguments)
         {
-            try {
-                int D = GetDiscriminant(Arguments);
-                int a = Arguments["a"];
-                int b = Arguments["b"];
+            int D = GetDiscriminant(Arguments);
+            int a = Arguments["a"];
+            int b = Arguments["b"];
 
-                if (D < 0)
-                {
-                    var ExceptionRoots = new ExeptionRoots();
-                    ExceptionRoots.SendExeptionRoots();
-                }
-                else if (D == 0)
-                {
-                    double x = checked((Math.Sqrt(D) - b) / 2 * a);
-                    Console.WriteLine("x = " + x);
-                }
-                else
-                {
-                    double x1 = checked((Math.Sqrt(D) - b) / 2 * a);
-                    double x2 = checked((-Math.Sqrt(D) - b) / 2 * a);
-
-                    Console.WriteLine("x1 = " + x1);
-                    Console.WriteLine("x2 = " + x2);
-                }
-            }
-            catch (OverflowException)
+            if (D < 0)
             {
-                throw;
+                throw new ExeptionRoots("Вещественных значений не найдено");
+            }
+            else if (D == 0)
+            {
+                double x = checked((Math.Sqrt(D) - b) / 2 * a);
+                Console.WriteLine("x = " + x);
+            }
+            else
+            {
+                double x1 = checked((Math.Sqrt(D) - b) / 2 * a);
+                double x2 = checked((-Math.Sqrt(D) - b) / 2 * a);
+
+                Console.WriteLine("x1 = " + x1);
+                Console.WriteLine("x2 = " + x2);
             }
         }
 
